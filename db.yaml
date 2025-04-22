@@ -1,0 +1,18 @@
+# This is a very PoC basic manifest
+apiVersion: "acid.zalan.do/v1"
+kind: postgresql
+metadata:
+  name: revo-db
+spec:
+  teamId: "acid"
+  volume:
+    size: 1Gi
+  numberOfInstances: 2
+  users:
+    revo:
+    - superuser
+    - createdb
+  databases:
+    revo: revo
+  postgresql:
+    version: "17"

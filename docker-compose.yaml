@@ -1,0 +1,63 @@
+name: revo
+services:
+  app:
+    build: .
+    ports:
+      - "7777:7777"
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_NAME=hello_app
+      - DB_USER=postgres
+      - DB_PASS=postgres
+      - DB_PORT=5432
+    volumes:
+      - .:/app
+    restart: always
+    develop:
+      watch:
+        - action: sync
+          path: .
+          target: .
+
+  unittests:
+    image: revo-app
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_NAME=hello_app
+      - DB_USER=postgres
+      - DB_PASS=postgres
+      - DB_PORT=5432
+    volumes:
+      - .:/app
+    restart: no
+    entrypoint: [ python, -m, pytest, tests/unit ]
+
+  apitests:
+    image: revo-app
+    depends_on:
+      - db
+      - app
+    environment:
+      - API_URL=http://app:7777
+    volumes:
+      - .:/app
+    restart: no
+    entrypoint: [ python, -m, pytest, tests/api ]
+
+  db:
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=hello_app
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_data:
