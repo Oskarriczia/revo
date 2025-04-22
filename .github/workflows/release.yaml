@@ -42,6 +42,6 @@ jobs:
         with:
           push: true
           provenance: false
-          tags: 
-            - ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-            - ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.CLEAN_REF_NAME }}
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.CLEAN_REF_NAME }}
