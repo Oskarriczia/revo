@@ -76,6 +76,12 @@ Given the app requires a database, docker-compose stack will get one and run loc
 
 ## Install A.K.A Deploying to your kubernetes cluster
 
+Simply run
+
+```helm install revo chart/revo/```
+
+
+
 Make sure to inspect `values.yaml` and set things like `ingress` and other cool stuff!
 This helm chart is very basic, but hey! At least you can set the DB things :)
 
@@ -85,12 +91,6 @@ This helm chart is very basic, but hey! At least you can set the DB things :)
   * postgresql database
 
 #### Installing postgresql database in your kubernetes cluster
-
-Simply run
-
-```helm install revo chart/revo/```
-
-Keep in mind that app requires a postgresql database, so:
 
 Recommended way would be to install Zalando's postgresl operator - https://github.com/zalando/postgres-operator/blob/master/docs/quickstart.md
 
