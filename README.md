@@ -56,18 +56,86 @@ Given that, the database in question is postgres, zalando postgresql operator wi
 Providing a reliable k8s cluster with storage, network, ingress, etc might require some work, but will benefit the organization long term.
 Hopefully, a running cluster, available for dev workloads is somewhere out there, ready to be used.
 
-CI/CD and remote deployment is not yet fully supported as it requires remote artifact store.
+Tests for CI/CD are not yet fully supported as it requires docker-in-docker (and compose) and this is not available in github's hosted runners.
 
 
 ## Deploying locally
+
+Local deployment is based of `docker-compose.yaml` and `Makefile`.
+Makefile is used for simplicity, docker-compose to get dependencies, etc.
+Given the app requires a database, docker-compose stack will get one and run locally semi ephemeral - semi, because it will use docker volume for storage.
 
 ### Prerequisites
 
 * docker
 * make (not strictly necessary, but useful)
 
-# Install
+#### Deploying
 
-### values.yaml
+`make run`
 
-Look at the `values.yaml` and create your own file with proper overrides. 
+## Install A.K.A Deploying to your kubernetes cluster
+
+Make sure to inspect `values.yaml` and set things like `ingress` and other cool stuff!
+This helm chart is very basic, but hey! At least you can set the DB things :)
+
+### Prerequisites
+  * kubernetes cluster (any)
+  * helm
+  * postgresql database
+
+#### Installing postgresql database in your kubernetes cluster
+
+Recommended way would be to install Zalando's postgresl operator - https://github.com/zalando/postgres-operator/blob/master/docs/quickstart.md
+
+```
+# add repo for postgres-operator
+helm repo add postgres-operator-charts https://opensource.zalando.com/postgres-operator/charts/postgres-operator
+
+# install the postgres-operator
+helm install postgres-operator postgres-operator-charts/postgres-operator
+```
+
+After that's done - you can apply provided example postgresql cluster defined in - `db.yaml`
+
+`kubectl apply -f db.yaml`
+
+And you're good to go with running
+
+`helm install revo chart/revo/`
+
+from repo main directory.
+
+Enjoy!
+
+
+## Developing locally
+
+Simply run
+
+`make run`
+
+Docker-compose stack will setup the db and app and watch your local directory for changes and apply them automatically.
+
+## Testing
+
+Simply run
+
+`make tests`
+
+It will run unit and api tests against your local code.
+
+Run
+
+`make unittests`
+
+for UT only
+OR
+
+`make apitests`
+
+for API tests.
+
+## Cleanup
+
+`make clean`
