@@ -86,6 +86,12 @@ This helm chart is very basic, but hey! At least you can set the DB things :)
 
 #### Installing postgresql database in your kubernetes cluster
 
+Simply run
+
+```helm install revo chart/revo/```
+
+Keep in mind that app requires a postgresql database, so:
+
 Recommended way would be to install Zalando's postgresl operator - https://github.com/zalando/postgres-operator/blob/master/docs/quickstart.md
 
 ```
